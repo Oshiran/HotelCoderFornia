@@ -4,7 +4,7 @@ CREATE Schema if NOT EXISTS hotel_database;
 -- Initialize the schema
 USE hotel_database;
 
--- Customer Table
+-- Customer
 
 -- 10 columns in total 
 
@@ -24,7 +24,7 @@ CREATE TABLE if NOT EXISTS Customers(
 
 -- Hotel Room
 
---7 Columns in total
+-- 7 Columns in total
 
 Create TABLE if NOT EXISTS Room(
     Hotel_ID int AUTO_INCREMENT PRIMARY KEY,
@@ -39,7 +39,7 @@ Create TABLE if NOT EXISTS Room(
 
 -- Booking
 
---6 Columns in total
+-- 6 Columns in total
 
 Create TABLE if NOT EXISTS Booking(
     Booking_ID int AUTO_INCREMENT PRIMARY KEY NOT null,
@@ -52,9 +52,9 @@ Create TABLE if NOT EXISTS Booking(
     Pax int(255) not null 
 );
 
---Guest
+-- Guest
 
---8 Columns in total
+-- 8 Columns in total
 
 Create Table if NOT EXISTS Guest(
     Guest_ID int AUTO_INCREMENT PRIMARY KEY NOT null,
@@ -70,3 +70,7 @@ Create Table if NOT EXISTS Guest(
     G_Notes varchar (255) DEFAULT '-'
 );
 
+-- Add record test
+Insert into Customers ()
+Values (null,'Jack','mehoff','11223344','2050-12-31','1975-01-01','01234567899','Filipino','Male','1254@something.com',null)
+;

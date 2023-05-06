@@ -16,9 +16,18 @@ def show_tables ():
     # Print the results
     for row in results:
         print(row)
-
-#execution
 show_tables()
+
+#Describe table and return
+TableName = input("Insert a table name from the follwing(booking,customers,guest,room):", )
+def Describe (TableName):
+    cursor.execute("Describe Customers")
+    results = cursor.fetchall()
+    for row in results:
+        print(row)
+Describe(TableName)
+
+
 
 # Close the cursor and connection
 cursor.close()

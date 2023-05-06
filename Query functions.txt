@@ -1,0 +1,3 @@
+Current Queries along with function description
+show_tables() = Shows the list of all tables available
+Describe= Describes a table and returns all information (User input required)
