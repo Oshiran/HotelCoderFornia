@@ -5,6 +5,9 @@ CREATE Schema if NOT EXISTS hotel_database;
 USE hotel_database;
 
 -- Customer Table
+
+-- 10 columns in total 
+
 CREATE TABLE if NOT EXISTS Customers(
     ID int AUTO_INCREMENT PRIMARY KEY,
     L_Name varchar(255) not null,
@@ -20,6 +23,9 @@ CREATE TABLE if NOT EXISTS Customers(
 );
 
 -- Hotel Room
+
+--7 Columns in total
+
 Create TABLE if NOT EXISTS Room(
     Hotel_ID int AUTO_INCREMENT PRIMARY KEY,
     Beds int(255) not null,
@@ -32,9 +38,14 @@ Create TABLE if NOT EXISTS Room(
 );
 
 -- Booking
+
+--6 Columns in total
+
 Create TABLE if NOT EXISTS Booking(
     Booking_ID int AUTO_INCREMENT PRIMARY KEY NOT null,
+    ID int not null,
     FOREIGN KEY(ID) REFERENCES Customers(ID),
+    Hotel_ID int not null,
     FOREIGN KEY(Hotel_ID) REFERENCES Room(Hotel_ID),
     Arrival_Date date not null,
     Departure_Date date not null,
@@ -42,6 +53,9 @@ Create TABLE if NOT EXISTS Booking(
 );
 
 --Guest
+
+--8 Columns in total
+
 Create Table if NOT EXISTS Guest(
     Guest_ID int AUTO_INCREMENT PRIMARY KEY NOT null,
     ID int not null,
