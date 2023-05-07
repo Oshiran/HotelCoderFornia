@@ -4,6 +4,7 @@ import pymysql
 
 # Establish a connection to the SQL Server database
 conn = pymysql.connect(db='hotel_database', user='root', passwd='', host='localhost', port=3306)
+print (conn)
 
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
@@ -32,5 +33,5 @@ Describe(TableName)
 # Close the cursor and connection
 cursor.close()
 
-print(conn)
+
 conn.close()
