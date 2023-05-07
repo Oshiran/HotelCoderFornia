@@ -9,8 +9,7 @@ st.title('Welcome to Room Reservers, Hotel CoderFornia')
 
 #print connection establisment
 'Connection at', conn
-st.balloons()
-st.snow()
+
 
 
 # Create a cursor object to interact with the database
@@ -20,7 +19,7 @@ Option1= st.selectbox(
     'What would you like to do?',
     ('Booking', 'View Records'))
 
-#Pick between doing a booking or view a record
+#Do a booking or view a record
 if Option1 == 'Booking':
     st.header(Option1)
      
@@ -38,8 +37,12 @@ elif Option1 == 'View Records':
         Option3= st.selectbox(
             'Which option would you like to run',
             ('Describe a table', 'View a record'))
+        
         if Option3 == 'Describe a table':
             st.header(Option3)
+            cursor.execute('Describe Booking')
+            results=cursor.fetchall()
+            st.table(results)
         
         
     elif Option2 == 'Customers':
@@ -47,6 +50,7 @@ elif Option1 == 'View Records':
         Option3= st.selectbox(
             'Which option would you like to run',
             ('Describe a table', 'View a record'))
+        
         if Option3 == 'Describe a table':
             st.header(Option3)
             cursor.execute('Describe Customers')
@@ -55,9 +59,28 @@ elif Option1 == 'View Records':
          
     elif Option2 == 'Guest':
         st.header(Option2)
+        Option3= st.selectbox(
+            'Which option would you like to run',
+            ('Describe a table', 'View a record'))
+        
+        if Option3 == 'Describe a table':
+            st.header(Option3)
+            cursor.execute('Describe Guest')
+            results=cursor.fetchall()
+            st.table(results)
+        
         
     elif Option2 == 'Room':
         st.header(Option2)
+        Option3= st.selectbox(
+            'Which option would you like to run',
+            ('Describe a table', 'View a record'))
+        
+        if Option3 == 'Describe a table':
+            st.header(Option3)
+            cursor.execute('Describe Room')
+            results=cursor.fetchall()
+            st.table(results)
         
 
 
