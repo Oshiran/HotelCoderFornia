@@ -1,23 +1,40 @@
 import pymysql
+import streamlit as st
 
 # Establish a connection to the SQL Server database
 conn = pymysql.connect(db='hotel_database', user='root', passwd='', host='localhost', port=3306)
 
+st.title('Welcome to Room Reservers, Hotel CoderFornia')
+
+#print connection establisment
+'Connection at', conn
+st.balloons()
+
 # Create a cursor object to interact with the database
 cursor = conn.cursor()
 
-# Execute a query
-cursor.execute('SELECT * FROM your_table')
+Option1= st.selectbox(
+    'What would you like to do?',
+    ('Booking', 'View Records'))
 
-# Fetch the results of the query
-results = cursor.fetchall()
+if Option1 == 'Booking':
+    'You picked', Option1
+elif Option1 == 'View Records':
+    'You picked', Option1
+    Option2 = st.selectbox(
+        'Which table would you like to view?',
+        ('Booking','Customers','Guest','Room'))
+    if Option2 == 'Booking':
+        'You picked', Option2
+    elif Option2 == 'Customers':
+        'You picked', Option2
+    elif Option2 == 'Guest':
+        'You picked', Option2
+    elif Option2 == 'Room':
+        'You picked', Option2
 
-# Print the results
-for row in results:
-    print(row)
 
 # Close the cursor and connection
 cursor.close()
 
-print(conn)
 conn.close()

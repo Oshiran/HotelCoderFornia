@@ -8,3 +8,9 @@ option = st.selectbox('which number do you like best?',
 df['first column'])
 
 'you selected:', option
+
+option = st.selectbox(
+    'Which table would you like to edit?',
+    ('Customer', 'Hotel Room', 'Booking', 'Guest'))
+
+st.write('You selected:', option)
