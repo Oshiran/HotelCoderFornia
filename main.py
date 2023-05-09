@@ -91,12 +91,25 @@ elif Option1 == 'View Records':
             st.table(results)
         elif Option3 == 'View a record':
             st.header('View a record')
-            Option4 = st.number_input('Enter the **Guest ID** number',1,None,1)
-            cursor.execute('SELECT * FROM guest WHERE Guest_ID=%s',(int(Option4)))
-            results=cursor.fetchone()
-            st.table(results)
-            st.info(':exclamation: Results are displayed in the following order:')
-            st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
+            Option4= st.selectbox(
+                'How would you like to sort by?',
+                ('Guest ID', 'First Name and Last Name', 'Passport'))
+            
+            if Option4 == 'Guest ID':
+                Option5= st.number_input('Enter the **Guest ID** number',1,None,1)
+                cursor.execute('SELECT * FROM guest WHERE Guest_ID=%s',(int(Option5)))
+                results=cursor.fetchone()
+                st.table(results)
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
+            if Option4 == 'First Name and Last Name':
+                FirstName= st.text_input('Enter the first Name',str,255,'default',)
+                LastName= st.text_input('Enter the last Name',str,255,'default')
+                cursor.execute('SELECT * FROM guest WHERE Guest_F_Name =%s AND Guest_L_Name =%s',str(FirstName),str(LastName))
+                results=cursor.fetchall()
+                st.table()
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
             
         
         

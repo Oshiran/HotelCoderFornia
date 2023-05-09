@@ -70,7 +70,12 @@ Create Table if NOT EXISTS Guest(
     G_Notes varchar (255) DEFAULT '-'
 );
 
--- Add record test
+-- When adding Records follow this order Customers --> Booking --> Guest
+-- Add record test to Customers
 Insert into Customers ()
 Values (null,'Jack','mehoff','11223344','2050-12-31','1975-01-01','01234567899','Filipino','Male','1254@something.com',null)
 ;
+
+-- Add record test to guest for testing
+Insert into guest()
+Values()
