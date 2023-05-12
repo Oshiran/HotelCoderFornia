@@ -2,8 +2,7 @@ import pymysql
 import streamlit as st
 
 st.set_page_config('HotelCoderFornia',None,'centered','expanded',
-                   menu_items={
-                    'About':'Your hotel reservation system built by the RoomReservers with Alison, Ylyas and Luna'})
+                   menu_items={'About':'Your hotel reservation system built by the RoomReservers with Alison, Ylyas and Luna'})
 # Establish a connection to the SQL Server database
 conn = pymysql.connect(db='hotel_database', user='root', passwd='', host='localhost', port=3306)
 
@@ -22,6 +21,13 @@ Option1= st.selectbox(
 #Do a booking or view a record
 if Option1 == 'Booking':
     st.header(Option1)
+    tab5,tab6 = st.tabs([':blue[**New record**]', ':blue[**Update Records**]'])
+    
+    with tab5:
+        st.subheader('New Records')
+    
+    with tab6:
+        st.subheader('Update records')
      
 elif Option1 == 'View Records':
     st.header(Option1)
