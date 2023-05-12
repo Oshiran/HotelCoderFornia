@@ -2,7 +2,7 @@ import pymysql
 import streamlit as st
 
 st.set_page_config('HotelCoderFornia',None,'centered','expanded',
-                   menu_items={'About':'Your hotel reservation system built by the RoomReservers with Alison, Ylyas and Luna'})
+                   menu_items={'About':'Your hotel reservation system built by the RoomReservers'})
 # Establish a connection to the SQL Server database
 conn = pymysql.connect(db='hotel_database', user='root', passwd='', host='localhost', port=3306)
 
@@ -41,12 +41,12 @@ elif Option1 == 'View Records':
             ('View a record','Describe a table'),0,str,1)
         
         if Option2 == 'Describe a table':
-            st.header(Option2)
+            st.subheader(Option2)
             cursor.execute('Describe Booking')
             results=cursor.fetchall()
             st.table(results)
         elif Option2 == 'View a record':
-            st.header('View a record')
+            st.subheader('View a record')
             Option3=st.number_input('Enter the **Booking ID** number',1,None,1)
             cursor.execute('SELECT * FROM booking WHERE Booking_ID=%s',(int(Option3)))
             results=cursor.fetchone()
@@ -62,19 +62,41 @@ elif Option1 == 'View Records':
             ('View a record','Describe a table'),0,str,2)
         
         if Option2 == 'Describe a table':
-            st.header(Option2)
+            st.subheader(Option2)
             cursor.execute('Describe Customers')
             results=cursor.fetchall()
             st.table(results)
         
         elif Option2 == 'View a record':
-            st.header('View a record')
-            Option3=st.number_input('Enter the **Customer ID** number',1,None,1)
-            cursor.execute('SELECT * FROM customers WHERE ID=%s',(int(Option3)))
-            results=cursor.fetchone()
-            st.table(results)
-            st.info(':exclamation: Results are displayed in the following order:')
-            st.info('ID,Last Name, First Name, Passport Number, Passport Expiry, Date of birth, Phone no., Nationaility, Sex, Email, Credit Card')
+            st.subheader(Option2)
+            Option3=st.selectbox('How would you like to sort by?',
+                                 ('ID','First and Last Name','Passport no.'))
+            
+            if Option3 == 'ID':
+                CustomerID=int(st.number_input('Enter the **Customer ID** number',1,None,1))
+                cursor.execute('SELECT * FROM customers WHERE ID=%s',(CustomerID))
+                results=cursor.fetchone()
+                st.table(results)
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('ID,Last Name, First Name, Passport Number, Passport Expiry, Date of birth, Phone no., Nationaility, Sex, Email, Credit Card')
+            
+            elif Option3 == 'First and Last Name':
+                FirstName= str(st.text_input('Enter the first Name','',255,8))
+                LastName= str(st.text_input('Enter the last Name','',255,9))
+                cursor.execute('SELECT * FROM customers WHERE F_Name =%s AND L_Name =%s',(FirstName, LastName))
+                results=cursor.fetchall()
+                st.table(results)
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('ID,Last Name, First Name, Passport Number, Passport Expiry, Date of birth, Phone no., Nationaility, Sex, Email, Credit Card')
+            
+            elif Option3 == 'Passport no.':
+                Passport=Passport= str(st.text_input('Enter the Passport/IC number','',255,9))
+                cursor.execute('SELECT * FROM customers WHERE Passport_no=%s',(Passport))
+                results=cursor.fetchall()
+                st.table(results)
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('ID,Last Name, First Name, Passport Number, Passport Expiry, Date of birth, Phone no., Nationaility, Sex, Email, Credit Card')
+
     
     with tab3:
         st.subheader('Table: Guest')
@@ -84,13 +106,13 @@ elif Option1 == 'View Records':
             ('View a record','Describe a table'),0,str,3)
         
         if Option2 == 'Describe a table':
-            st.header(Option3)
+            st.subheader(Option2)
             cursor.execute('Describe Guest')
             results=cursor.fetchall()
             st.table(results)
 
         elif Option2 == 'View a record':
-            st.header('View a record')
+            st.subheader(Option2)
             Option3= st.selectbox(
                 'How would you like to sort by?',
                 ('Guest ID', 'First Name and Last Name', 'Passport'))
@@ -102,15 +124,21 @@ elif Option1 == 'View Records':
                 st.table(results)
                 st.info(':exclamation: Results are displayed in the following order:')
                 st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
-            # if Option3 == 'First Name and Last Name':
-            #     FirstName= str(st.text_input('Enter the first Name','',255,4))
-            #     LastName= str(st.text_input('Enter the last Name','',255,5))
-            #     cursor.execute('SELECT * FROM guest WHERE Guest_F_Name =%s AND Guest_L_Name =%s',str(FirstName),str(LastName))
-            #     results=cursor.fetchall()
-            #     st.table()
-            #     st.info(':exclamation: Results are displayed in the following order:')
-            #     st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
-            #NEED TO FIX THE QUERY SOMETHING WRONG WITH VARIABLE (AGAIN)
+            if Option3 == 'First Name and Last Name':
+                FirstName= str(st.text_input('Enter the first Name','',255,6))
+                LastName= str(st.text_input('Enter the last Name','',255,7))
+                cursor.execute('SELECT * FROM guest WHERE Guest_F_Name =%s AND Guest_L_Name =%s',(FirstName, LastName))
+                results=cursor.fetchall()
+                st.table(results)
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
+            if Option3 == 'Passport':
+                Passport= str(st.text_input('Enter the Passport/IC number','',255,8))
+                cursor.execute('SELECT * FROM guest WHERE Guest_Passport=%s',(Passport))
+                results=cursor.fetchall()
+                st.table(results)
+                st.info(':exclamation: Results are displayed in the following order:')
+                st.info('Guest ID, Customer ID, Hotel ID, Booking ID, Guest First Name, Guest Last Name, Guest Passport, Additional Notes')
 
     with tab4:
         st.subheader('Table: Room')
@@ -119,12 +147,12 @@ elif Option1 == 'View Records':
             ('View a record', 'Describe a table'),0,str,4)
         
         if Option2 == 'Describe a table':
-            st.header(Option2)
+            st.subheader(Option2)
             cursor.execute('Describe Room')
             results=cursor.fetchall()
             st.table(results)
         elif Option2 == 'View a record':
-           st.header('View a record')
+           st.subheader(Option2)
            Option3 = st.number_input('Enter the **Room ID** number',1,None,1)
            cursor.execute('SELECT * FROM room WHERE Hotel_ID=%s',(int(Option3)))
            results=cursor.fetchone()
