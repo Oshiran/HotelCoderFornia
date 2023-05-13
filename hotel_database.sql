@@ -37,6 +37,14 @@ Create TABLE if NOT EXISTS Room(
     Notes varchar(255) DEFAULT '-'
 );
 
+-- Add record test to Rooms for testing
+Insert into Room () Values (null,'1','Single','250','no','no','no',null);
+Insert into Room () Values (null,'2','Single','350','no','no','no',null);
+Insert into Room () Values (null,'2','Double','500','yes','yes','yes',null);
+Insert into Room () Values (null,'2','Twin','600','yes','yes','yes',null);
+Insert into Room () Values (null,'1','Queen','750','yes','yes','yes',null);
+Insert into Room () Values (null,'1','King','1000','yes','yes','yes',null);
+
 -- Booking
 
 -- 6 Columns in total
@@ -70,12 +78,8 @@ Create Table if NOT EXISTS Guest(
     G_Notes varchar (255) DEFAULT '-'
 );
 
--- When adding Records follow this order Customers --> Booking --> Guest
+-- When adding Records follow this order Room & Customers --> Booking --> Guest
 -- Add record test to Customers
-Insert into Customers ()
-Values (null,'Jack','mehoff','11223344','2050-12-31','1975-01-01','01234567899','Filipino','Male','1254@something.com',null)
-;
+Insert into Customers () Values (null,'Jack','who','11223344','2050-12-31','1975-01-01','01234567899','Filipino','Male','1254@something.com',null);
+Insert into Customers () Values (null,'Car','loss','065432456','2045-5-13','2000-3-14','4271322306','Malaysia','Male','0721@yahoo.com',null);
 
--- Add record test to guest for testing
-Insert into guest()
-Values()
