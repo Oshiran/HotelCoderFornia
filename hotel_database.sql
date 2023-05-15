@@ -15,7 +15,7 @@ CREATE TABLE if NOT EXISTS Customers(
     Passport_No varchar(255) not null UNIQUE,
     Passport_Exp date not null,
     DOB date not null,
-    Phone_no int(11) not null UNIQUE,
+    Phone_no varchar(15) not null UNIQUE,
     Nationality varchar(255) not null,
     Sex varchar(10) check (Sex in ('Female','Male')),
     Email varchar(300) not null UNIQUE,

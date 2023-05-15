@@ -1,3 +1,4 @@
+import datetime as dt
 import pymysql
 import streamlit as st
 
@@ -24,15 +25,32 @@ if Option1 == 'Booking':
     tab5,tab6 = st.tabs([':blue[**New record**]', ':blue[**Update Records**]'])
     
     with tab5:
-        st.subheader('New Records')
+        Option2=st.selectbox('Which New would you like to make',('Booking','Customer','Guest',))
 
-        with st.form('10',True):
-            st.selectbox(
-                'New customer?',
-                ('Yes','No'))
-            submit=st.form_submit_button('Submit')
-            if submit == True:
-                st.write('Submitted!')
+        if Option2 == "Booking":
+            st.subheader('New Booking Record')
+
+        if Option2 == "Customer":
+            st.subheader('New Customer Record')
+            with st.form('10',True):
+                Var2 = st.text_input('Enter First Name','',255,11)
+                Var3 = st.text_input('Enter Last Name','',255,12)
+                Var4 =st.text_input('Enter Passport number','',15,13)
+                Var5 =st.date_input('Enter Passport Expiration',None,None,None,14)
+                Var6 =st.date_input('Enter Date of birth',dt.datetime.today(),dt.date(1850,1,1),dt.datetime.today(),15)
+                Var7 =st.text_input('Enter phone number','',15,16)
+                Var8 =st.text_input('Enter Nationality','',255,17)
+                Var9 =st.radio('Enter Gender',options=['Male','Female'],horizontal=True,key=18)
+                Var10 =st.text_input('Enter e-mail address','',255,19)
+                Var11 =st.text_input('Enter credit card',type='password')
+                submit=st.form_submit_button('Submit')
+                if submit == True:
+                    # cursor.execute('INSERT INTO customers(L_name,F_Name,Passport_No,Passport_Exp,DOB,Phone_no,Nationality,Sex,Email,Credit_Card) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,)',(Var2,Var3,Var4,Var5,Var6,Var7,Var8,Var9,Var10,Var11))
+                    # conn.commit()
+                    st.write('Record entered')
+                
+        if Option2 == "Guest":
+            st.subheader('New Guest Record')
     
     with tab6:
         st.subheader('Update records')
@@ -173,7 +191,6 @@ with st.sidebar:
     st.caption('Made by the RoomReservers!')
     st.header(':violet[You are currently are in:]')
     st.subheader(Option1)
-    st.caption(':loudspeaker: You can resize me at the right border!')
 
 # Close the cursor and connection
 cursor.close()
