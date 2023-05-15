@@ -26,11 +26,13 @@ if Option1 == 'Booking':
     with tab5:
         st.subheader('New Records')
 
-        # with st.form:
-        #     st.select_box('What would you like to do',('uhhh', 'ahhh'))
-        #     submit=st.form_submit_button('Submit')
-        #     if submit == True:
-        #         st.write('Submitted!')
+        with st.form('10',True):
+            st.selectbox(
+                'New customer?',
+                ('Yes','No'))
+            submit=st.form_submit_button('Submit')
+            if submit == True:
+                st.write('Submitted!')
     
     with tab6:
         st.subheader('Update records')
