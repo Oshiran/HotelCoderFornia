@@ -39,6 +39,7 @@ You'll need to clone the repository as below in order to run the notebooks.
 git clone https://github.com/Oshiran/HotelCoderFornia.git
 ```
 Download the following:
+
 1)XAMPP
  [Download XAMPP](https://www.apachefriends.org/ "XAMPP Homepage")
 
@@ -59,6 +60,7 @@ Check Port of SQL and match to port line 9 of main.py
 3) Run SQL in PHPAdmin
 
     a) Create New Database
+
     b) Import hotel_database.sql to import database
 
 4) Create Virtual Enviorment with Anaconda
