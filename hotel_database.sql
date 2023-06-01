@@ -75,9 +75,9 @@ Insert into Room () Values (null,'2','Twin','600','yes','yes','yes',null);
 Insert into Room () Values (null,'1','Queen','750','yes','yes','yes',null);
 Insert into Room () Values (null,'1','King','1000','yes','yes','yes',null);
 
---Add record test to booking
-Insert into Booking () Values (null, '1', '1', '2023-06-01', '2023-06-01','1');
+-- Add record test to booking
+Insert into Booking () Values (null,'1','1','2023-06-01','2023-06-01','1');
 Insert into Booking () Values (null,'2','2','2023-05-30','2023-06-15','2');
 
---Add record test to Guest
+-- Add record test to Guest
 Insert into Guest () Values(null,'1','Aldriech','Jones','101010101010100','-');
