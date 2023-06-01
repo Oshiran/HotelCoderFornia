@@ -15,11 +15,10 @@ Option1= st.selectbox('What would you like to do?',('Booking', 'View Records'))
 #Do a booking or view a record
 if Option1 == 'Booking':
     GUI.DisplayO1(Option1)
-    Option2=st.selectbox('Which new would you like to make',('Booking','Customer','Guest',))
+    Option2=st.selectbox('Which new would you like to make',('Customer','Booking','Guest',))
 
     #New Booking record
     if Option2 == "Booking":
-        GUI.BookingForm(cursor,conn)
         st.subheader('New Booking Record')
         with st.form('21',True):
             GUI.BookingForm(cursor,conn)
@@ -105,8 +104,7 @@ elif Option1 == 'View Records':
 
     #file uploader
     with tab5:
-        upload=st.file_uploader('Upload record','txt',False)
-        f.filupload(upload)
+        f.filupload()
 
 with st.sidebar:
     GUI.sidebar(Option1)

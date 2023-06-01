@@ -30,6 +30,33 @@ def DisplayO1(Option1):
     if Option1 == 'View Records':st.subheader('Record Viewing')
     else: st.subheader('New Record')
 
+#New Booking Form
+def BookingForm(cursor,conn):
+    Var2=st.date_input('Enter Arrival Date',dt.datetime.today(),dt.datetime.today(),key=3)
+    Var3=st.date_input('Enter Departure Date',dt.datetime.today(),dt.datetime.today(),key=4)
+    Var4=st.number_input('Enter Pax',1,value=1,key=5)
+
+    cursor.execute('SELECT ID FROM customers')
+    rows= cursor.fetchall()
+    customer_id_list= []
+    for row in rows:
+        column_value = row[0]
+        customer_id_list.append(column_value)
+    customer_id_list.sort()
+    Var5=st.selectbox('Select Customer ID',customer_id_list,key=1)
+
+    cursor.execute('SELECT Hotel_ID FROM room')
+    rows= cursor.fetchall()
+    room_id_list= []
+    for row in rows:
+        column_value= row[0]
+        room_id_list.append(column_value)
+    room_id_list.sort()
+    Var6=st.selectbox('Select Room ID',room_id_list,key=2)
+    submit=st.form_submit_button('Submit')
+    if submit == True:
+        Pye.NewBooking(cursor,conn,str(Var2),str(Var3),Var4,Var5,Var6)
+
 #New Customer Form
 def CustomerForm(cursor,conn):
     Var2 = st.text_input('Enter First Name',key=6)
@@ -37,7 +64,7 @@ def CustomerForm(cursor,conn):
     Var4 =st.text_input('Enter Passport number',max_chars=15,key=8)
     Var5 =st.date_input('Enter Passport Expiration',min_value=dt.datetime.today(),key=9)
     Var6 =st.date_input('Enter Date of birth',dt.datetime.today(),dt.date(1850,1,1),dt.datetime.today(),10)
-    Var7 =st.text_input('Enter phone number',max_chars=15,key=11)
+    Var7 =st.text_input('Enter Phone number',max_chars=15,key=11)
     Var8 =st.text_input('Enter Nationality',key=12)
     Var9 =st.radio('Enter Gender',options=['Male','Female'],horizontal=True,key=13)
     Var10 =st.text_input('Enter e-mail address','',key=14)
@@ -46,35 +73,39 @@ def CustomerForm(cursor,conn):
     if submit == True:
         Pye.NewCustomer(cursor,conn,Var2,Var3,Var4,Var5,Var6,Var7,Var8,Var9,Var10,Var11)
 
-#New Booking Form
-def BookingForm(cursor,conn):
-    Var2=st.number_input('Enter Customer ID',1,step=1,key=1)
-    Var3=st.number_input('Enter Room ID',1,step=1,key=2)
-    Var4=st.date_input('Enter Arrival Date',dt.datetime.today(),dt.datetime.today(),key=3)
-    Var5=st.date_input('Enter Departure Date',dt.datetime.today(),dt.datetime.today(),key=4)
-    Var6=st.number_input('Enter Pax',1,value=1,key=5)
-    submit=st.form_submit_button('Submit')
-    if submit == True:
-        Pye.NewBooking(cursor,conn,Var2,Var3,Var4,Var5,Var6)
-
 #New Guest Form
 def GuestForm(cursor,conn):
-    Var2=st.number_input('Enter Guest ID',1,step=1,key=16)
-    Var3=st.number_input('Enter ID',1,step=1,key=17)
-    Var4=st.number_input('Enter Hotel ID',1,step=1,key=64)
-    Var5=st.number_input('Enter Booking ID',1,step=1,key=18)
-    Var6=st.text_input('Enter Guest First Name',key=19)
-    Var7=st.text_input('Enter Guest Last Name',key=20)
-    Var8=st.text_input('Enter Guest Passport',max_chars=15,key=21)
-    Var9=st.text_input('Enter any additional notes', key=22)
-    submit=st.form_submit_button('Submit')
+    Var2=st.text_input('Enter Guest First Name',key=19)
+    Var3=st.text_input('Enter Guest Last Name',key=20)
+    Var4=st.text_input('Enter Guest Passport',max_chars=15,key=21)
+    Var5=st.text_input('Enter any additional notes', key=22)
+
+    cursor.execute('SELECT Booking_ID FROM booking')
+    rows= cursor.fetchall()
+    booking_id_list= []
+    for row in rows:
+        column_value= row[0]
+        booking_id_list.append(column_value)
+    booking_id_list.sort()
+    Var6=st.selectbox('Select Booking ID',booking_id_list,key=18)
+    
+    if len(booking_id_list) == 0:
+        submit=st.form_submit_button('Submit',disabled=True)
+    else:submit=st.form_submit_button('Submit')
     if submit == True:
-        Pye.NewGuest(cursor,conn,Var2,Var3,Var4,Var5,Var6,Var7,Var8)
+        Pye.NewGuest(cursor,conn,Var2,Var3,Var4,Var5,Var6)
 
 #View a booking record
 def ViewBookingRecord(cursor):
     st.subheader('View a record')
-    Option3=st.number_input('Enter the **Booking ID** number',1,None,1,1,key=23) 
+    cursor.execute('SELECT Booking_ID FROM booking')
+    rows= cursor.fetchall()
+    booking_id_list=[]
+    for row in rows:
+        column_value =row[0]
+        booking_id_list.append(column_value)
+    booking_id_list.sort()
+    Option3=st.selectbox('Select **Booking ID** number',booking_id_list,key=23) 
     cursor.execute('SELECT * FROM booking WHERE Booking_ID=%s',(int(Option3)))
     results=cursor.fetchone()
     f.ViewBooking(results)
@@ -86,25 +117,64 @@ def ViewCustomerRecord(Option2,cursor):
     Option3=st.selectbox('How would you like to sort by?',('ID','First and Last Name','Passport no.'))
     
     if Option3 == 'ID':
-        CustomerID=int(st.number_input('Enter the **Customer ID** number',1,None,1,1,key=32))
+        cursor.execute('SELECT ID FROM customers')
+        rows = cursor.fetchall()
+
+        customer_id_list = []
+
+        for row in rows:
+            column_value = row[0]
+            customer_id_list.append(column_value)
+
+        customer_id_list.sort()
+
+        CustomerID = st.selectbox('Select Customer ID',customer_id_list)
         cursor.execute('SELECT * FROM customers WHERE ID=%s',(CustomerID))
         results=cursor.fetchone()
         f.ViewCustomers(results)
         f.conversion(results,4,5)
     
     elif Option3 == 'First and Last Name':
-        FirstName= str(st.text_input('Enter the first Name',key=33))
-        LastName= str(st.text_input('Enter the last Name',key=34))
-        cursor.execute('SELECT * FROM customers WHERE F_Name =%s AND L_Name =%s',(FirstName, LastName))
-        results=cursor.fetchone()
-        f.ViewCustomers(results)
+
+        with st.form('form'):
+            LastName= str(st.text_input('Enter the last Name',key=34))
+            FirstName= str(st.text_input('Enter the first Name',key=33))
+            submit= st.form_submit_button('Submit')
+            if submit == True:
+                cursor.execute('SELECT L_Name,F_Name FROM customers')
+                rows= cursor.fetchall()
+                customer_name_list= []
+                for row in rows:
+                    column_value= row[0]
+                    column_value2 =row[1]
+                    customer_name_list.append(column_value + '' + column_value2)
+                customer_name_list.sort()
+                customer_name_checker = LastName + '' + FirstName
+
+                if customer_name_checker in customer_name_list:
+                    cursor.execute('SELECT * FROM customers WHERE F_Name =%s AND L_Name =%s',(FirstName, LastName))
+                    results=cursor.fetchone()
+                    f.ViewCustomers(results)
+                else:st.warning('Entered Customer Name not in Database')
         
     
     elif Option3 == 'Passport no.':
-        Passport=Passport= str(st.text_input('Enter the Passport/IC number',max_chars=15,key=35))
-        cursor.execute('SELECT * FROM customers WHERE Passport_no=%s',(Passport))
-        results=cursor.fetchone()
-        f.ViewCustomers(results)
+        with st.form('form'):
+            Passport=Passport= str(st.text_input('Enter the Passport/IC number',max_chars=15,key=35))
+            submit= st.form_submit_button('Submit')
+            if submit == True:
+                cursor.execute('SELECT Passport_No FROM customers')
+                rows= cursor.fetchall()
+                passport_no_list= []
+                for row in rows:
+                    column_value= row[0]
+                    passport_no_list.append(column_value)
+                passport_no_list.sort()
+                if Passport in passport_no_list:
+                    cursor.execute('SELECT * FROM customers WHERE Passport_no=%s',(Passport))
+                    results=cursor.fetchone()
+                    f.ViewCustomers(results)
+                else:st.warning('Entered Passport Number not in database')
 
 #View a guest record
 def ViewGuestRecord(Option2,cursor):
@@ -114,41 +184,116 @@ def ViewGuestRecord(Option2,cursor):
         ('Guest ID', 'First Name and Last Name', 'Passport'))
     
     if Option3 == 'Guest ID':
-        Option4= st.number_input('Enter the **Guest ID** number',1,None,1,1,key=60)
+        cursor.execute('SELECT Guest_ID FROM guest')
+        rows= cursor.fetchall()
+        Guest_id_list=[]
+        for row in rows:
+            column_value= row[0]
+            Guest_id_list.append(column_value)
+        Guest_id_list.sort()
+        Option4= st.selectbox('Select the **Guest ID** number',Guest_id_list,key=60)
         cursor.execute('SELECT * FROM guest WHERE Guest_ID=%s',(int(Option4)))
-        f.ViewGuest(cursor)
+        results=cursor.fetchone()
+        f.ViewGuest(results)
+        results=str(results)
+        st.download_button('Download Results',results)
+        
         
     if Option3 == 'First Name and Last Name':
-        FirstName= str(st.text_input('Enter the first Name','',255,43))
-        LastName= str(st.text_input('Enter the last Name','',255,44))
-        cursor.execute('SELECT * FROM guest WHERE Guest_F_Name =%s AND Guest_L_Name =%s',(FirstName, LastName))
-        f.ViewGuest(cursor)
+        with st.form('form3'):
+            FirstName= str(st.text_input('Enter the First Name','',255,76))
+            LastName= str(st.text_input('Enter the Last Name','',255,77))
+            submit=st.form_submit_button('Submit')
+            if submit == True:
+                cursor.execute('SELECT Guest_F_Name,Guest_L_Name FROM guest')
+                rows= cursor.fetchall()
+                Guest_name_list= []
+                for row in rows:
+                    column_value= row[0]
+                    column_value2 = row[1]
+                    Guest_name_list.append(column_value + '' + column_value2)
+                Guest_name_list.sort()
+                Guest_name_checker =FirstName + '' + LastName
+                if Guest_name_checker in Guest_name_list:
+                    cursor.execute('SELECT * FROM guest WHERE Guest_F_Name =%s AND Guest_L_Name =%s',(FirstName, LastName))
+                    results=cursor.fetchone()
+                    f.ViewGuest(results)
+                else:st.warning('Entered Guest Name not in Datavase')
 
     if Option3 == 'Passport':
-        Passport= str(st.text_input('Enter the Passport/IC number','',255,45))
-        cursor.execute('SELECT * FROM guest WHERE Guest_Passport=%s',(Passport))
-        f.ViewGuest(cursor)
+        with st.form('form4'):
+            Passport= str(st.text_input('Enter the Passport/IC number','',255,78))
+            submit=st.form_submit_button('Submit')
+            if submit == True:
+                cursor.execute('SELECT Guest_Passport FROM guest')
+                rows= cursor.fetchall()
+                passport_no_list= []
+                for row in rows:
+                    column_value= row[0]
+                    passport_no_list.append(column_value)
+                passport_no_list.sort()
+                if Passport in passport_no_list:
+                    cursor.execute('SELECT * FROM guest WHERE Guest_Passport=%s',(Passport))
+                    results=cursor.fetchone()
+                    f.ViewGuest(results)
+                else:st.warning('Entered Passport not in Database')
 
 #View a room record
 def ViewRoomRecord(Option2,cursor):
     st.subheader(Option2)
-    Option3 = st.number_input('Enter the **Room ID** number',1,None,1)
-    f.ViewRoom(cursor,Option3)
+    cursor.execute('SELECT Hotel_ID FROM room')
+    rows= cursor.fetchall()
+    Room_id_list=[]
+    for row in rows:
+        column_value= row[0]
+        Room_id_list.append(column_value)
+    Room_id_list.sort()
+    Option4= st.selectbox('Select the **Room ID** number',Room_id_list)
+    cursor.execute('SELECT * FROM room WHERE Hotel_ID=%s',(int(Option4)))
+    results=cursor.fetchone()
+    f.ViewRoom(results)
+    results=str(results)
+    st.download_button('Download Results',results)
+
 
 #Update Booking
 def UpdateBookingRecord(Option3,cursor,conn):
     if Option3 == 'Yes':
         st.subheader('Record Ammendment')
-        var=st.number_input('What was the original Booking ID?',1,value=1,step=25)
+        cursor.execute('SELECT Booking_ID FROM booking')
+        rows= cursor.fetchall()
+        Booking_ID_list= []
+        for row in rows:
+            column_value=row[0]
+            Booking_ID_list.append(column_value)
+        Booking_ID_list.sort()
+        var=st.selectbox('What was the original Booking ID?',Booking_ID_list)
         with st.form('36',True):
-            Var2=st.number_input('Enter Customer ID',1,step=1,key=26)
-            Var3=st.number_input('Enter Room ID',1,step=1,key=27)
-            Var4=st.date_input('Enter Arrival Date',dt.datetime.today(),dt.datetime.today(),key=28)
-            Var5=st.date_input('Enter Departure Date',dt.datetime.today(),dt.datetime.today(),key=29)
-            Var6=st.number_input('Enter Pax',1,value=1,key=30)
+            Var2=st.date_input('Enter Arrival Date',dt.datetime.today(),dt.datetime.today(),key=28)
+            Var3=st.date_input('Enter Departure Date',dt.datetime.today(),dt.datetime.today(),key=29)
+            Var4=st.number_input('Enter Pax',1,value=1,key=30)
+
+            cursor.execute('SELECT ID FROM customers')
+            rows= cursor.fetchall()
+            customer_id_list= []
+            for row in rows:
+                column_value = row[0]
+                customer_id_list.append(column_value)
+            customer_id_list.sort()
+            Var5=st.selectbox('Select the **CustomerID**',customer_id_list)
+
+            cursor.execute('SELECT Hotel_ID FROM room')
+            rows= cursor.fetchall()
+            Room_id_list=[]
+            for row in rows:
+                column_value= row[0]
+                Room_id_list.append(column_value)
+            Room_id_list.sort()
+            Var6= st.selectbox('Select the **Room ID** number',Room_id_list)
             submit=st.form_submit_button('Submit')
         if submit == True:
             Pye.UpdateBooking(cursor,conn,Var2,Var3,Var4,Var5,Var6,var)
+            st.info('Refresh the page to see changes')
     
     if Option3 == 'No':
         Option3No()
@@ -157,7 +302,14 @@ def UpdateBookingRecord(Option3,cursor,conn):
 def UpdateCustomerRecord(Option3,cursor,conn):
     if Option3 == 'Yes':
         st.subheader('Record Ammendment')
-        var=st.number_input('What was the original ID?',1,value=1,step=1)
+        cursor.execute('SELECT ID FROM customers')
+        rows = cursor.fetchall()
+        customer_id_list = []
+        for row in rows:
+            column_value = row[0]
+            customer_id_list.append(column_value)
+        customer_id_list.sort()
+        var= st.selectbox('Select Customer ID',customer_id_list,key=75)
         with st.form('52',True):
             Var2 = st.text_input('Enter First Name',key=37)
             Var3 = st.text_input('Enter Last Name',key=38)
@@ -172,6 +324,7 @@ def UpdateCustomerRecord(Option3,cursor,conn):
             submit=st.form_submit_button('Submit')
         if submit == True:
             Pye.UpdateCustomer(cursor,conn,Var2,Var3,Var4,Var5,Var6,Var7,Var8,Var9,Var10,Var11,var)
+            st.info('Refresh the page to see changes')
     
     if Option3 == 'No':
         Option3No()
@@ -180,18 +333,31 @@ def UpdateCustomerRecord(Option3,cursor,conn):
 def UpdateGuestRecord(Option3,cursor,conn):
     if Option3 == 'Yes':
         st.subheader('Record Ammendment')
-        var=st.number_input('What was the original Guest ID?',1,value=1,step=1)
+        cursor.execute('SELECT Guest_ID FROM guest')
+        rows= cursor.fetchall()
+        Guest_id_list=[]
+        for row in rows:
+            column_value= row[0]
+            Guest_id_list.append(column_value)
+        Guest_id_list.sort()
+        var=st.selectbox('What was the original Guest ID?',Guest_id_list)
         with st.form('63',True):
-            Var2=st.number_input('Enter Customer ID',1,step=1,key=16)
-            Var3=st.number_input('Enter Room ID',1,step=1,key=17)
-            Var4=st.number_input('Enter Booking ID',1,step=1,key=18)
-            Var5=st.text_input('Enter Guest First Name',key=19)
-            Var6=st.text_input('Enter Guest Last Name',key=20)
-            Var7=st.text_input('Enter Guest Passport',max_chars=15,key=21)
-            Var8=st.text_input('Enter any additional notes', key=22)
+            Var2=st.text_input('Enter Guest First Name',key=19)
+            Var3=st.text_input('Enter Guest Last Name',key=20)
+            Var4=st.text_input('Enter Guest Passport',max_chars=15,key=21)
+            Var5=st.text_input('Enter any additional notes', key=22)
+            cursor.execute('SELECT Booking_ID FROM booking')
+            rows= cursor.fetchall()
+            Booking_ID_list= []
+            for row in rows:
+                column_value=row[0]
+                Booking_ID_list.append(column_value)
+            Booking_ID_list.sort()
+            Var6=st.selectbox('Enter Booking ID',Booking_ID_list)
             submit=st.form_submit_button('Submit')
         if submit == True:
-            Pye.UpdateGuest(cursor,conn,Var2,Var3,Var4,Var5,Var6,Var7,Var8,var)
+            Pye.UpdateGuest(cursor,conn,Var2,Var3,Var4,Var5,Var6,var)
+            st.info('Refresh the page to see changes')
 
-        if Option3 == 'No':
+    if Option3 == 'No':
             Option3No()

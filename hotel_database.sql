@@ -5,7 +5,6 @@ CREATE Schema if NOT EXISTS hotel_database;
 USE hotel_database;
 
 -- Customer
-
 -- 10 columns in total 
 
 CREATE TABLE if NOT EXISTS Customers(
@@ -23,7 +22,6 @@ CREATE TABLE if NOT EXISTS Customers(
 );
 
 -- Hotel Room
-
 -- 7 Columns in total
 
 Create TABLE if NOT EXISTS Room(
@@ -37,16 +35,7 @@ Create TABLE if NOT EXISTS Room(
     Notes varchar(255) DEFAULT '-'
 );
 
--- Add record test to Rooms for testing
-Insert into Room () Values (null,'1','Single','250','no','no','no',null);
-Insert into Room () Values (null,'2','Single','350','no','no','no',null);
-Insert into Room () Values (null,'2','Double','500','yes','yes','yes',null);
-Insert into Room () Values (null,'2','Twin','600','yes','yes','yes',null);
-Insert into Room () Values (null,'1','Queen','750','yes','yes','yes',null);
-Insert into Room () Values (null,'1','King','1000','yes','yes','yes',null);
-
 -- Booking
-
 -- 6 Columns in total
 
 Create TABLE if NOT EXISTS Booking(
@@ -61,15 +50,10 @@ Create TABLE if NOT EXISTS Booking(
 );
 
 -- Guest
-
 -- 8 Columns in total
 
 Create Table if NOT EXISTS Guest(
     Guest_ID int AUTO_INCREMENT PRIMARY KEY NOT null,
-    ID int not null,
-    FOREIGN KEY (ID) REFERENCES Customers(ID),
-    Hotel_ID int not null,
-    FOREIGN KEY (Hotel_ID) REFERENCES Room(Hotel_ID),
     Booking_ID int not null,
     FOREIGN Key (Booking_ID) REFERENCES Booking(Booking_ID),
     Guest_F_Name varchar(255) not null,
@@ -83,3 +67,17 @@ Create Table if NOT EXISTS Guest(
 Insert into Customers () Values (null,'Jack','who','11223344','2050-12-31','1975-01-01','01234567899','Filipino','Male','1254@something.com',null);
 Insert into Customers () Values (null,'Car','loss','065432456','2045-5-13','2000-3-14','4271322306','Malaysia','Male','0721@yahoo.com',null);
 
+-- Add record test to Rooms for testing
+Insert into Room () Values (null,'1','Single','250','no','no','no',null);
+Insert into Room () Values (null,'2','Single','350','no','no','no',null);
+Insert into Room () Values (null,'2','Double','500','yes','yes','yes',null);
+Insert into Room () Values (null,'2','Twin','600','yes','yes','yes',null);
+Insert into Room () Values (null,'1','Queen','750','yes','yes','yes',null);
+Insert into Room () Values (null,'1','King','1000','yes','yes','yes',null);
+
+--Add record test to booking
+Insert into booking () Values (null, 1, 1, '2023-06-01', '2023-06-01', 1)
+Insert into booking () Values (null,'2','2','2023-05-30','2023-06-15','2')
+
+--Add record test to Guest
+Insert into Guest () Values(null,'1','Aldriech','Jones','101010101010100','')
